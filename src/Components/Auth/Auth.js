@@ -17,7 +17,7 @@ class Auth extends Component {
     }
 
     componentDidMount(){
-        if(this.props.username){
+        if(this.props.user.username){
             this.props.history.push('/dashboard');
         }
     }
@@ -35,8 +35,7 @@ class Auth extends Component {
         if(password && password === verPassword){
             axios.post('/api/register', {username,  password, profilePicture: picture})
             .then(res => {
-                //redux function
-                this.props.getUser(res.data);
+                this.props.getUser(res.data);//redux function
                 this.props.history.push('/dashboard');
                 
             })
@@ -60,7 +59,7 @@ class Auth extends Component {
 
     }
 
-    render(){
+    render(){   
         return(
             <div>
                 <section className='login-box'>

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const massive = require('massive');
 const session = require('express-session')
+const authCtrl = require('./authController');
 const ctrl = require('./controller');
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env
 const port = SERVER_PORT;
@@ -28,8 +29,19 @@ massive({
     console.log('db connected');
 });
 
-//endpoints
-app.post('/api/register', ctrl.register);
-app.post('/api/login', ctrl.login);
+//Auth endpoints
+app.post('/api/register', authCtrl.register);
+app.post('/api/login', authCtrl.login);
+app.get('/api/logout', authCtrl.logout)
+//Post endpoint
+app.get('/api/posts/:bool', ctrl.getPosts)
 
-app.listen(port, () => console.log(`Memeing on port ${port}`));
+app.get('/api/posts', ctrl.getAllPost)
+app.get('/api/posts/single/:id', ctrl.getSinglePost)
+app.post('/api/posts/create', ctrl.createPost)
+app.delete('/api/posts/:id', ctrl.deletePost)
+
+
+
+
+app.listen(port, () => console.log(`Helo-ing on port ${port}`));

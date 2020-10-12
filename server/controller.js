@@ -1,42 +1,70 @@
-const bcrypt = require('bcryptjs');
 
 module.exports = {
-    register: async(req, res) => {
-        const {username, password, profilePicture} = req.body;
+    getPosts: async(req, res) => {
         const db = req.app.get('db');
+        const {user_id} = req.session.user;
+        const {bool} = req.params;
+        const {search} = req.query;
+        let posts = [];
+        // console.log(search, bool)
 
-        const foundUser = await db.check_user({username});
-        if(foundUser[0]){
-            return res.status(400).send('Username already in use')
+        if(bool === 'true'){
+            posts = await db.get_posts();
         }
-
-        let salt = bcrypt.genSaltSync(10)
-        let hash = bcrypt.hashSync(password, salt);
-        const newUser =  await db.register_user({username, hash, profilePicture})
-        req.session.user = newUser[0]
-        res.status(201).send(req.session.user);
-    },
-    login: async(req, res) => {
-        const {username, password} = req.body
-        const db = req.app.get('db')
+        else{
+            posts = await db.get_posts_without_user(user_id)
+        }
         
-        const foundUser = await db.check_user({username})
-        if(!foundUser[0]){
-            return res.status(400).send('Username is not found')
+        if(search) {
+            const filteredPosts = posts.filter( el =>{
+                return el.title.toLowerCase().includes(search.toLowerCase())
+            })
+            return res.status(200).send(filteredPosts)
         }
 
-        const authenticated = bcrypt.compareSync(password, foundUser[0].password);
-        if(!authenticated) {
-            return res.status(401).send('Password is incorrect')
-        }
-
-        delete foundUser[0].password;
-
-        req.session.user = foundUser[0]
-        res.status(202).send(req.session.user)
+        res.status(200).send(posts);
     },
-    logout: (req, res) => {
-        req.session.destroy();
-        res.sendStatus(200);
+    getAllPost: async (req, res) => {
+        const db = req.app.get('db');
+        db.get_posts()
+        .then(posts => res.status(200).send(posts))
+        .catch(err => console.log(err))
+        
+        // assign to a variable option
+        // getAllPost: async (req, res) => {
+            // const db = req.app.get('db');
+            // const posts = await db.get_posts();
+            // return res.status(200).send(posts)
+        // }
+    },
+    getSinglePost: async(req, res) => {
+        const db = req.app.get('db');
+        const {id} = req.params;
+        const post = await db.get_single_post(id)
+        // console.log(post)
+        res.status(200).send(post[0])
+        // db.get_single_post(id)
+        // .then(post => res.status(200).send(post))
+        // .catch(err => console.log(err))
+    },
+    createPost: async(req, res) => {
+        const db = req.app.get('db');
+        const {title, img, content, user_id} = req.body;
+        // const {user_id} = req.session.user;
+        console.log(user_id)
+        const post = await db.create_post(title, img, content, user_id);
+        // console.log([post])
+        // if(!post[0]){
+        //     return res.status(409).send('error')
+        // } 
+        res.status(200).send(post[0])
+    },
+    deletePost: async(req, res) => {
+        const db = req.app.get('db');
+        const {id} = req.params;
+        // const [post] = await 
+        db.delete_post(id);
+        res.status(200).send('Delete successful');
     }
+    
 }

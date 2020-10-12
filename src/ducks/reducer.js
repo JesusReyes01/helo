@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const initialState = {
     user:{}
 }
@@ -11,13 +13,20 @@ export function getUser(userObj){
         payload: userObj
     }
 }
-
+ 
 export function clearUser(){
+    axios.get('/api/logout')
     return{
         type: CLEAR_USER,
         payload: {}
     }
 }
+// export function clearUser(){
+//     return{
+//         type: CLEAR_USER,
+//         payload: {}
+//     }
+// }
 
 export default function reducer(state = initialState, action){
     const {type, payload} = action;

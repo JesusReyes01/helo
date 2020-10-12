@@ -1,36 +1,95 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import axios from 'axios'
+import {Link} from 'react-router-dom';
+import './Dashboard.css';
 
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
     constructor(props){
         super(props);
         this.state = {
             search: '',
             myPost: true,
-            posts: [],
-            loading: true
+            posts: []
         }
+    }
+
+    componentDidMount(){
+        if(!this.props.user.username){
+            this.props.history.push('/')
+        }
+        else{
+            this.getPost();
+        }
+    }
+    getPost = () => {
+        //testing getPost with all
+        // axios.get('/api/posts')
+        // .then(res => this.setState ({posts: res.data}))
+        // .catch(err => console.log('get request failed'))
+        
+        const {myPost, search} = this.state;
+        axios.get(`/api/posts/${myPost}?search=${search}`)
+        .then(res => this.setState({posts: res.data, search: ''}))
+        .catch(err => console.log(err))
+        
+
     }
 
     handleSearch = (val) => {
         this.setState({search: val})
     }
 
+    handleCheckboxChange = (val) => {
+        this.setState({ myPost: !this.state.myPost})
+        // this.getPost(); cycle is off with this included
+    }
+
+    resetSearch = () => {
+        this.setState({search: ''})
+        this.getPost();
+    }
+
     render(){
+        let mappedPosts = this.state.posts.map( el => {
+            return (
+
+            <Link to={`/post/${el.post_id}`} key={el.post_id} >
+                <div >
+                    <div>
+                        <h3>{el.title}</h3>
+                        <div>
+                            <p>by {el.username}</p>
+                            <img src={el.profile_picture} alt='author' />
+                        </div>
+                    </div>
+                </div>    
+            </Link>
+            )}
+            )
         return(
             <div>
-                <input
-                    onChange={e => this.handleSearch(e.target.value)}
-                    placeholder='Search by Title'
-                ></input>
-                <button>Search</button>
-                <button>Reset</button>
-                <input 
-                    checked={this.state.myPosts} 
-                    onChange={_ => this.setState({ myPosts: !this.state.myPosts }, this.grabPosts)} 
-                    type='checkbox' />
-
+                <div>
+                    <input
+                        type='text'
+                        name='search'
+                        onChange={e => this.handleSearch(e.target.value)}
+                        placeholder='Search by Title'
+                        ></input>
+                    <button onClick={this.getPost} className='search-button'>Search</button>
+                    <button onClick={this.resetSearch}>Reset</button>
+                    <input 
+                        checked={this.state.myPost} 
+                        onChange={_ => this.handleCheckboxChange()} 
+                        type='checkbox' />
+                </div>
+                <div>
+                    {mappedPosts}
+                </div>
             </div>
         )
     }
 }
+const mapStateToProps = reduxState => reduxState;
+export default connect(mapStateToProps)(Dashboard);
