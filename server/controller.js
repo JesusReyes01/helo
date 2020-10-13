@@ -49,8 +49,8 @@ module.exports = {
     },
     createPost: async(req, res) => {
         const db = req.app.get('db');
-        const {title, img, content, user_id} = req.body;
-        // const {user_id} = req.session.user;
+        const {title, img, content} = req.body;
+        const {user_id} = req.session.user;
         console.log(user_id)
         const post = await db.create_post(title, img, content, user_id);
         // console.log([post])

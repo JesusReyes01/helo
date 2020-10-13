@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
+import './Post.css';
 
 
 class Post extends Component {
@@ -11,13 +12,18 @@ class Post extends Component {
         }
     }
     componentDidMount() {
-        const {postId} = this.props.match.params;
-        console.log(postId)
-        axios
-           .get(`/api/posts/single/${postId}`)
-           .then(res => this.setState({ post: res.data }))
-           .catch(err => console.log(err.request));
-        console.log(this.props.user.user_id, this.state.post.author_id)
+        if(!this.props.user.username){
+            this.props.history.push('/')
+        }
+        else{
+            const {postId} = this.props.match.params;
+            console.log(postId)
+            axios
+            .get(`/api/posts/single/${postId}`)
+            .then(res => this.setState({ post: res.data }))
+            .catch(err => console.log(err.request));
+        }
+        
      }
 
      handleDelete = () => {
@@ -31,15 +37,15 @@ class Post extends Component {
         const {title, img, content, username, profile_picture, author_id} = this.state.post;
 
         return(
-            <div>
-                <div>
-                    <h1>{title}</h1>
-                    <div>
+            <div className='post-flex'>
+                <div className='title-header'>
+                    <h1 className='title'>{title}</h1>
+                    <div className="author-flex">
                         <p>by {username}</p>
                         <img src={profile_picture} alt='User-pic' />
                     </div>
                 </div>
-                <div>
+                <div className='post'>
                     <img src={img} alt='post-img' />
                     <p>{content}</p>
                 </div>

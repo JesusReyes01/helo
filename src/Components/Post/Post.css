@@ -1,0 +1,35 @@
+.post-flex {
+    background: rgb(76, 112, 148);
+    width: 800px;
+    display:flex;
+    flex-direction: column;
+    padding: 20px;
+    
+}
+.post-flex img{
+    /* height:200px; */
+    width:200px;
+}
+.title-header{
+    background: rgb(207, 140, 114);
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding:10px;
+    
+}
+.title-header img{
+    width: 70px
+}
+.post{
+    background:rgb(97, 116, 97);
+    display:flex;
+    justify-content: space-between;
+    padding: 25px;
+}
+button{
+    width: 100px;
+    position: relative;
+    margin: 0 auto;
+
+}

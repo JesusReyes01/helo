@@ -56,11 +56,11 @@ class Dashboard extends Component {
             return (
 
             <Link to={`/post/${el.post_id}`} key={el.post_id} >
-                <div >
-                    <div>
-                        <h3>{el.title}</h3>
-                        <div>
-                            <p>by {el.username}</p>
+                <div className='dash-post-flex'>
+                    <div className='dash-item-flex'>
+                        <h3 className='title'>{el.title}</h3>
+                        <div className='author-flex'>
+                            <p className='username-position'>by {el.username}</p>
                             <img src={el.profile_picture} alt='author' />
                         </div>
                     </div>
@@ -70,7 +70,7 @@ class Dashboard extends Component {
             )
         return(
             <div>
-                <div>
+                <div className='search-flex'>
                     <input
                         type='text'
                         name='search'
@@ -78,13 +78,14 @@ class Dashboard extends Component {
                         placeholder='Search by Title'
                         ></input>
                     <button onClick={this.getPost} className='search-button'>Search</button>
-                    <button onClick={this.resetSearch}>Reset</button>
+                    <button onClick={this.resetSearch} className='reset-button'>Reset</button>
+                    <p>My Post:</p>
                     <input 
                         checked={this.state.myPost} 
                         onChange={_ => this.handleCheckboxChange()} 
                         type='checkbox' />
                 </div>
-                <div>
+                <div className='post-table'>
                     {mappedPosts}
                 </div>
             </div>

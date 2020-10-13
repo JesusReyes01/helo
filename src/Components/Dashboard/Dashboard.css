@@ -9,3 +9,67 @@
     font-weight: 700;
     font-size: 16px;
 }
+
+.reset-button {
+    padding: 10px;
+    margin: 5px 10px;
+    background-color: #ed6b5a;
+    border-radius: 7px;
+    border: none;
+    font-family: Open Sans, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+}
+.search-flex{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-flex input{
+    height: 20px;
+}
+
+
+.dash-post-flex img {
+    width: 70px;
+}
+.dash-item-flex {
+    background: rgb(75, 97, 80);
+    width:700px;
+    height:60px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 0px 5px 0px 5px;
+    
+
+}
+.title {
+    /* background: lightgreen; */
+    font-size: 25px;
+    color: black;
+    font-weight: 500;
+    text-decoration: none;
+}
+.post-table{
+    background: rgb(75, 103, 141);
+    width:710px;
+    padding: 1px 10px 10px 10px;
+    
+}
+.author-flex{
+    /* background: lightseagreen; */
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.username-position{
+    /* background: lightcoral; */
+    /* display:flex; */
+    color: black;    
+
+
+    
+}
